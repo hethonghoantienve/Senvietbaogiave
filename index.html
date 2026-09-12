@@ -2,46 +2,55 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Báo Giá Vé Máy Bay</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 20px auto;
-            padding: 16px;
-            width: 440px;
+        * {
             box-sizing: border-box;
-            background-color: #f4f6f9;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 20px auto;
+            padding: 18px;
+            max-width: 460px;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            color: #1e293b;
         }
         h2 {
-            color: #1a73e8;
-            margin: 0 0 12px 0;
+            color: #0284c7;
+            margin: 0 0 14px 0;
             text-align: center;
-            font-size: 18px;
+            font-size: 19px;
+            font-weight: 700;
         }
         .upload-box {
-            border: 2px dashed #1a73e8;
-            background: #fff;
+            border: 2px dashed #0284c7;
+            background: #f0f9ff;
             border-radius: 8px;
-            padding: 16px;
+            padding: 14px;
             text-align: center;
             cursor: pointer;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-size: 13.5px;
-            color: #1a73e8;
-            font-weight: bold;
-            transition: background 0.2s;
+            color: #0369a1;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
         .upload-box:hover {
-            background: #e8f0fe;
+            background: #e0f2fe;
+            border-color: #0369a1;
         }
         .group-title {
             font-size: 12.5px;
-            font-weight: bold;
-            color: #444;
-            margin-bottom: 4px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .btn-group {
             display: flex;
@@ -58,39 +67,43 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px;
-            border: 1.5px solid #e0e0e0;
+            padding: 8px 4px;
+            border: 1.5px solid #cbd5e1;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 13px;
-            color: #444;
+            font-weight: 600;
+            font-size: 12.5px;
+            color: #475569;
             background: #fff;
             text-align: center;
             user-select: none;
+            transition: all 0.15s ease;
         }
         .btn-group input:checked + .btn-select {
-            border-color: #1a73e8;
-            background: #e8f0fe;
-            color: #1a73e8;
+            border-color: #0284c7;
+            background: #e0f2fe;
+            color: #0369a1;
         }
         .input-box {
             width: 100%;
-            padding: 9px;
-            border: 1.5px solid #e0e0e0;
+            padding: 9px 12px;
+            border: 1.5px solid #cbd5e1;
             border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14.5px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 600;
             outline: none;
             margin-bottom: 12px;
+            background: #fff;
+            color: #0f172a;
+            transition: border-color 0.2s;
         }
         .input-box:focus {
-            border-color: #1a73e8;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
         }
         .pax-container {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 12px;
         }
         .pax-box {
@@ -100,41 +113,50 @@
         .pax-box input {
             text-align: center;
             margin-bottom: 0;
+            font-size: 15px;
         }
         textarea {
             width: 100%;
-            height: 190px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background: #fdfdfd;
-            resize: none;
+            height: 200px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            resize: vertical;
             font-size: 13px;
-            line-height: 1.5;
-            padding: 8px;
-            box-sizing: border-box;
+            line-height: 1.55;
+            padding: 10px;
             outline: none;
+            color: #0f172a;
+            font-family: inherit;
+        }
+        textarea:focus {
+            border-color: #0284c7;
         }
         .btn-copy {
             width: 100%;
-            background: #1a73e8;
+            background: #0284c7;
             color: white;
             border: none;
-            padding: 11px;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 14.5px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 6px;
+            margin-top: 8px;
             margin-bottom: 14px;
+            transition: background 0.2s;
+        }
+        .btn-copy:hover {
+            background: #0369a1;
         }
         .btn-copy.copied {
-            background: #34a853;
+            background: #16a34a;
         }
         .ba-container {
             background: #fff;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e2e8f0;
         }
         .ba-grid {
             display: grid;
@@ -143,25 +165,27 @@
             margin-bottom: 8px;
         }
         .btn-ba {
-            background: #f1f3f4;
-            border: 1px solid #dadce0;
-            padding: 8px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 8px 6px;
             border-radius: 6px;
             font-size: 12px;
-            font-weight: bold;
-            color: #3c4043;
+            font-weight: 600;
+            color: #334155;
             cursor: pointer;
             text-align: center;
+            transition: all 0.15s;
         }
         .btn-ba:hover {
-            background: #e8eaed;
+            background: #e2e8f0;
+            border-color: #94a3b8;
         }
         .toast-msg {
             font-size: 12px;
-            color: #34a853;
+            color: #16a34a;
             text-align: center;
-            font-weight: bold;
-            height: 16px;
+            font-weight: 600;
+            min-height: 18px;
             margin-top: 4px;
         }
         #vjBaggageGroup {
@@ -172,14 +196,14 @@
 <body>
 
 <div>
-    <h2>✈️ Tool Báo Giá Vé Máy Bay</h2>
+    <h2>✈️ Báo Giá Vé Nhanh</h2>
     
     <div class="upload-box" id="dropZone">
-        <span id="uploadStatus">📸 Click chọn ảnh hoặc Ctrl+V để dán ảnh hệ thống</span>
+        <span id="uploadStatus">📸 Click chọn hoặc dán (Ctrl+V) ảnh màn hình vé</span>
         <input type="file" id="fileInput" accept="image/*" style="display:none;">
     </div>
 
-    <div class="group-title">Loại vé:</div>
+    <div class="group-title">Hình thức bay:</div>
     <div class="btn-group">
         <label>
             <input type="radio" name="ticketType" id="typeOneWay" value="mot_chieu" checked>
@@ -191,91 +215,91 @@
         </label>
     </div>
 
-    <div class="group-title">Hãng bay (Hành lý):</div>
+    <div class="group-title">Hãng bay & Tiêu chuẩn hành lý:</div>
     <div class="btn-group">
         <label>
             <input type="radio" name="airlineType" id="airlineNone" value="none">
-            <div class="btn-select">Bỏ chọn</div>
+            <div class="btn-select">Mặc định</div>
         </label>
         <label>
             <input type="radio" name="airlineType" id="airlineVNA" value="vna">
-            <div class="btn-select">VNA</div>
+            <div class="btn-select">Vietnam Airlines</div>
         </label>
         <label>
             <input type="radio" name="airlineType" id="airlineVJ" value="vj" checked>
-            <div class="btn-select">Vietjet</div>
+            <div class="btn-select">Vietjet Air</div>
         </label>
     </div>
 
     <div id="vjBaggageGroup">
-        <div class="group-title">Hành lý ký gửi Vietjet:</div>
+        <div class="group-title">Hành lý ký gửi kèm theo:</div>
         <div class="btn-group">
             <label>
                 <input type="radio" name="vjBaggage" id="vjBg20" value="20" checked>
-                <div class="btn-select">Giảm 20kg KG</div>
+                <div class="btn-select">20kg Ký Gửi</div>
             </label>
             <label>
                 <input type="radio" name="vjBaggage" id="vjBg40" value="40">
-                <div class="btn-select">Giảm 40kg KG</div>
+                <div class="btn-select">40kg Ký Gửi</div>
             </label>
         </div>
     </div>
 
-    <div class="group-title">Số tiền trong ảnh quét / nhập vào là:</div>
+    <div class="group-title">Dữ liệu tiền đưa vào tính:</div>
     <div class="btn-group">
         <label>
             <input type="radio" name="priceInputType" id="priceTypeSingle" value="single">
-            <div class="btn-select" style="font-size: 11.5px;">Giá lẻ 1 Người lớn</div>
+            <div class="btn-select">Giá 1 Người Lớn</div>
         </label>
         <label>
             <input type="radio" name="priceInputType" id="priceTypeTotal" value="total" checked>
-            <div class="btn-select" style="font-size: 11.5px;">Tổng giá cả đoàn</div>
+            <div class="btn-select">Tổng Tiền Cả Đoàn</div>
         </label>
     </div>
 
-    <div class="group-title">Tổng giá vé hệ thống (Quét hoặc Nhập tay):</div>
-    <input type="number" id="rawPrice" class="input-box" placeholder="Nhập số tiền..." autofocus>
+    <div class="group-title">Giá vé hệ thống (VNĐ):</div>
+    <input type="number" id="rawPrice" class="input-box" placeholder="Nhập tổng tiền từ hệ thống..." autofocus>
 
     <div style="display: flex; gap: 8px;">
         <div style="flex: 1;">
-            <div class="group-title">Giảm thêm (Tổng bill):</div>
-            <input type="number" id="minusAmount" class="input-box" value="0">
+            <div class="group-title">Chiết khấu (%):</div>
+            <input type="number" id="minusPercent" class="input-box" value="35">
         </div>
         <div style="flex: 1;">
-            <div class="group-title">Giảm (%):</div>
-            <input type="number" id="minusPercent" class="input-box" value="35">
+            <div class="group-title">Giảm thêm (VNĐ):</div>
+            <input type="number" id="minusAmount" class="input-box" value="0">
         </div>
     </div>
 
     <div class="group-title">Số lượng hành khách:</div>
     <div class="pax-container">
         <div class="pax-box">
-            <div class="group-title" style="font-weight: normal; font-size: 11px;">Người lớn</div>
+            <div class="group-title" style="font-weight: 500; font-size: 11.5px; justify-content: center;">Người lớn</div>
             <input type="number" id="paxAdult" class="input-box" value="1" min="1">
         </div>
         <div class="pax-box">
-            <div class="group-title" style="font-weight: normal; font-size: 11px;">Trẻ em (2-12t)</div>
+            <div class="group-title" style="font-weight: 500; font-size: 11.5px; justify-content: center;">Trẻ em (2-11t)</div>
             <input type="number" id="paxChild" class="input-box" value="0" min="0">
         </div>
         <div class="pax-box">
-            <div class="group-title" style="font-weight: normal; font-size: 11px;">Em bé (&lt;2t)</div>
+            <div class="group-title" style="font-weight: 500; font-size: 11.5px; justify-content: center;">Em bé (&lt;2t)</div>
             <input type="number" id="paxInfant" class="input-box" value="0" min="0">
         </div>
     </div>
 
-    <div class="group-title">Tin nhắn gửi khách:</div>
-    <textarea id="templateOutput" readonly placeholder="Tin nhắn tự động tạo tại đây..."></textarea>
-    <button class="btn-copy" id="copyBtn">Sao Chép Tin Nhắn Báo Giá</button>
+    <div class="group-title">Nội dung tin nhắn tư vấn:</div>
+    <textarea id="templateOutput" readonly placeholder="Nội dung báo giá hoàn chỉnh sẽ hiển thị ở đây..."></textarea>
+    <button class="btn-copy" id="copyBtn">📋 Sao Chép Báo Giá</button>
 
     <div class="ba-container">
-        <div class="group-title" style="color: #d93025; text-align: center; margin-bottom: 6px;">🎯 THẢ BẢ TIN NHÂN NHANH (BẤM LÀ COPY)</div>
+        <div class="group-title" style="color: #dc2626; justify-content: center; margin-bottom: 8px;">🎯 MẪU THẢ BẢ CHỐT KHÁCH NHANH</div>
         <div class="ba-grid">
             <button class="btn-ba" onclick="copyBa(1)">⏳ Giữ chỗ miễn phí</button>
-            <button class="btn-ba" onclick="copyBa(2)">🔥 Giục khách chốt</button>
-            <button class="btn-ba" onclick="copyBa(3)">❌ Báo sắp hết vé</button>
-            <button class="btn-ba" onclick="copyBa(4)">📉 Vé đang xuống</button>
+            <button class="btn-ba" onclick="copyBa(2)">🔥 Báo sắp hết ưu đãi</button>
+            <button class="btn-ba" onclick="copyBa(3)">❌ Sắp nhảy hạng vé</button>
+            <button class="btn-ba" onclick="copyBa(4)">📉 Đợt nhả vé rẻ</button>
         </div>
-        <textarea id="baOutput" readonly placeholder="Nội dung thả bả bấm chọn sẽ hiện ở đây..." style="height: 70px; font-size: 12.5px;"></textarea>
+        <textarea id="baOutput" readonly placeholder="Bấm chọn kịch bản phía trên để copy nhanh..." style="height: 65px; font-size: 12px;"></textarea>
         <div class="toast-msg" id="toastMsg"></div>
     </div>
 </div>
@@ -284,10 +308,10 @@
 let detectedFlightInfo = null;
 
 const mauThaBa = {
-    1: "Dạ em đang thấy giá này tốt nhất trong tuần, em hỗ trợ giữ chỗ MIỄN PHÍ cho mình trước để khóa giá đẹp này lại nha anh/chị? Lát mình chốt sau đỡ bị tăng giá ạ!",
-    2: "Anh/chị ơi, mã giảm giá đại lý của chuyến này hệ thống sắp hết hạn áp dụng rồi ạ. Mình chốt luôn bây giờ để em xuất vé giữ nguyên giá rẻ này cho mình nhé!",
-    3: "Chuyến này hiện tại hệ thống chỉ còn đúng vài ghế giá rẻ thôi ạ, mình chốt sớm không hệ thống nhảy lên hạng thương gia thì phí lắm anh/chị ơi!",
-    4: "Hệ thống bên em vừa báo chuyến này đang có đợt nhả vé giá tốt đột xuất, rẻ hơn lúc nãy khá nhiều. Anh/chị chốt giữ chỗ luôn kẻo người khác đặt mất nha!"
+    1: "Dạ em thấy vé chuyến này đang có giá tốt nhất tuần. Em hỗ trợ giữ chỗ MIỄN PHÍ trước để khóa giá đẹp này lại cho mình nhé? Anh/chị cân nhắc chốt sau để tránh bị tăng giá ạ!",
+    2: "Anh/chị ơi, suất vé ưu đãi đại lý cho chuyến này chuẩn bị hết thời hạn áp dụng rồi ạ. Mình báo em xuất sớm để giữ trọn mức giá giảm này nhé!",
+    3: "Chuyến này trên hệ thống chỉ còn vài ghế mức giá ưu đãi thôi ạ. Anh/chị chốt sớm kẻo hệ thống tự nhảy lên hạng giá cao hơn thì rất tiếc ạ!",
+    4: "Hệ thống vừa nhả một số chỗ giá tốt đột xuất cho chuyến này, tiết kiệm hơn lúc nãy khá nhiều. Anh/chị chốt giữ chỗ luôn kẻo hết nha!"
 };
 
 function copyBa(id) {
@@ -295,7 +319,7 @@ function copyBa(id) {
     document.getElementById('baOutput').value = txt;
     navigator.clipboard.writeText(txt).then(() => {
         const toast = document.getElementById('toastMsg');
-        toast.innerText = "✓ Đã tự động copy tin nhắn thả bả!";
+        toast.innerText = "✓ Đã copy kịch bản chốt khách!";
         setTimeout(() => { toast.innerText = ""; }, 2000);
     });
 }
@@ -318,9 +342,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     [rawPrice, minusAmount, minusPercent, paxAdult, paxChild, paxInfant].forEach(el => el.addEventListener('input', handleUpdate));
     [typeOneWay, typeRoundTrip].forEach(el => el.addEventListener('change', handleUpdate));
-    
+
     document.querySelectorAll('input[name="airlineType"]').forEach(el => el.addEventListener('change', function() {
-        // Ẩn hiện cụm chọn hành lý của Vietjet tùy thuộc vào hãng được chọn
         if (this.value === 'vj') {
             vjBaggageGroup.style.display = 'block';
         } else {
@@ -335,10 +358,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     dropZone.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', (e) => e.target.files.length && processImage(e.target.files[0]));
-    
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = "#e8f0fe"; });
-    dropZone.addEventListener('dragleave', () => { dropZone.style.background = "#fff"; });
-    dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.style.background = "#fff"; e.dataTransfer.files.length && processImage(e.dataTransfer.files[0]); });
+
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = "#e0f2fe"; });
+    dropZone.addEventListener('dragleave', () => { dropZone.style.background = "#f0f9ff"; });
+    dropZone.addEventListener('drop', (e) => { 
+        e.preventDefault(); 
+        dropZone.style.background = "#f0f9ff"; 
+        if (e.dataTransfer.files.length) processImage(e.dataTransfer.files[0]); 
+    });
 
     document.addEventListener('paste', function (e) {
         const items = (e.clipboardData || e.originalEvent.clipboardData).items;
@@ -350,17 +377,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function cleanVN(str) {
+        return str.toLowerCase()
+            .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, "a")
+            .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, "o")
+            .replace(/[èéẹẻẽêềếệểễ]/g, "e")
+            .replace(/[ùúụủũưừứựửữ]/g, "u")
+            .replace(/[ìíịỉĩ]/g, "i")
+            .replace(/[ỳýỵỷỹ]/g, "y")
+            .replace(/[đ]/g, "d");
+    }
+
     function processImage(file) {
-        uploadStatus.innerText = "⏳ Đang quét dữ liệu ảnh...";
-        uploadStatus.style.color = "#e67e22";
+        uploadStatus.innerText = "⏳ Đang trích xuất dữ liệu ảnh...";
+        uploadStatus.style.color = "#d97706";
         detectedFlightInfo = null;
 
         const reader = new FileReader();
         reader.onload = function() {
             Tesseract.recognize(reader.result, 'eng')
             .then(({ data: { text } }) => {
-                const cleanText = text.toLowerCase().replace(/\s+/g, ' ');
+                const cleanText = cleanVN(text).replace(/\s+/g, ' ');
                 
+                // Nhận diện hãng
                 if (cleanText.includes("vietnam") || cleanText.includes("vna") || cleanText.includes("vn ")) {
                     document.getElementById('airlineVNA').checked = true;
                     vjBaggageGroup.style.display = 'none';
@@ -369,65 +408,99 @@ document.addEventListener('DOMContentLoaded', function () {
                     vjBaggageGroup.style.display = 'block';
                 }
 
+                // Nhận diện chuyến bay
                 const airportMatches = text.match(/\b([A-Z]{3})\b/g) || [];
                 const flightCodeMatches = text.match(/\b(VN|VJ|QH|VU)\s*(\d{3,4})\b/gi) || [];
 
                 if (airportMatches.length >= 2) {
                     let uniqueAirports = [...new Set(airportMatches)].filter(a => !["VND","VNA","USD"].includes(a));
-                    let routeStr = uniqueAirports.slice(0, 2).join(" ↔ ");
+                    let routeStr = uniqueAirports.slice(0, 2).join(" ➜ ");
                     
-                    if (cleanText.includes("khứ hồi") || cleanText.includes("round") || flightCodeMatches.length >= 2) {
+                    if (cleanText.includes("khu hoi") || cleanText.includes("round") || flightCodeMatches.length >= 2) {
                         document.getElementById('typeRoundTrip').checked = true;
                     } else {
                         document.getElementById('typeOneWay').checked = true;
                     }
 
+                    let cleanFlightCodes = [...new Set(flightCodeMatches.map(c => c.replace(/\s+/g, '').toUpperCase()))];
+
                     detectedFlightInfo = {
                         route: routeStr,
-                        flightCodes: flightCodeMatches.map(c => c.toUpperCase()).join(" & ")
+                        flightCodes: cleanFlightCodes.join(" & ")
                     };
                 }
 
                 let finalTargetPrice = 0;
-                let keywordIdx = cleanText.indexOf("tổng giá vé");
-                if (keywordIdx === -1) keywordIdx = cleanText.indexOf("tổng số tiền");
-                if (keywordIdx === -1) keywordIdx = cleanText.indexOf("tong gia ve");
-                if (keywordIdx === -1) keywordIdx = cleanText.indexOf("tong so tien");
+                let farePrice = 0;
+                let taxFeePrice = 0;
 
-                if (keywordIdx !== -1) {
-                    let subStrAfterKeyword = cleanText.substring(keywordIdx, keywordIdx + 60);
-                    let numberMatches = subStrAfterKeyword.match(/(\d{1,3}[.,]\d{3}([.,]\d{3})*)/g);
-                    
-                    if (numberMatches && numberMatches.length > 0) {
-                        finalTargetPrice = parseFloat(numberMatches[0].replace(/[.,]/g, ''));
+                // Tách từng dòng để phân tích
+                const rawLines = text.split('\n');
+                for (let line of rawLines) {
+                    let cLine = cleanVN(line);
+
+                    // Lấy số tiền trên dòng này
+                    let nums = line.match(/\b\d{1,3}([.,]\d{3}){1,3}\b/g);
+                    let lineAmount = 0;
+                    if (nums && nums.length > 0) {
+                        lineAmount = parseFloat(nums[nums.length - 1].replace(/[.,]/g, ''));
+                    }
+
+                    // 1. Tìm dòng Giá vé người lớn
+                    if (cLine.includes("ve nguoi lon") || cLine.includes("nguoi lon")) {
+                        if (lineAmount >= 100000) farePrice = lineAmount;
+                    }
+
+                    // 2. Tìm dòng Thuế + phí
+                    if (cLine.includes("thue") || cLine.includes("phi")) {
+                        if (lineAmount >= 100000) taxFeePrice = lineAmount;
+                    }
+
+                    // 3. Tìm dòng Tổng giá vé (chấp nhận tong, gia ve, thanh toan)
+                    if (cLine.includes("tong") || cLine.includes("gia ve") || cLine.includes("thanh toan")) {
+                        // Trường hợp số bị khung đỏ che một phần: bốc mọi chữ số sau từ khóa
+                        let afterTong = line.substring(Math.max(0, line.toLowerCase().indexOf("t")));
+                        let digitsOnly = afterTong.replace(/[^\d]/g, '');
+                        
+                        if (digitsOnly.length >= 7) { // 7 chữ số là từ 1,000,000đ trở lên
+                            finalTargetPrice = parseFloat(digitsOnly);
+                        } else if (lineAmount >= 100000) {
+                            finalTargetPrice = lineAmount;
+                        }
                     }
                 }
 
-                if (finalTargetPrice === 0 || finalTargetPrice < 100000) {
-                    const allMatches = text.match(/(\d{1,3}[.,]\d{3}([.,]\d{3})*)/g);
-                    if (allMatches && allMatches.length > 0) {
-                        allMatches.forEach(m => {
-                            let val = parseFloat(m.replace(/[.,]/g, ''));
-                            if (val > finalTargetPrice && val > 100000) {
-                                finalTargetPrice = val;
-                            }
-                        });
+                // 4. Cơ chế thông minh: Nếu tổng vé đọc bị mờ/bị che dẫn tới <= thuế phí
+                // Tự động cộng: Vé gốc + Thuế phí
+                if (farePrice > 0 && taxFeePrice > 0) {
+                    let calculatedTotal = farePrice + taxFeePrice;
+                    if (finalTargetPrice === 0 || finalTargetPrice <= taxFeePrice || finalTargetPrice < calculatedTotal) {
+                        finalTargetPrice = calculatedTotal;
+                    }
+                }
+
+                // 5. Fallback cuối cùng: Lấy số lớn nhất tìm thấy nếu các bước trên chưa bắt được
+                if (finalTargetPrice === 0) {
+                    const allMatches = text.match(/\b\d{1,3}([.,]\d{3}){1,3}\b/g) || [];
+                    let detectedAmounts = allMatches.map(m => parseFloat(m.replace(/[.,]/g, ''))).filter(n => n >= 100000);
+                    if (detectedAmounts.length > 0) {
+                        finalTargetPrice = Math.max(...detectedAmounts);
                     }
                 }
 
                 if (finalTargetPrice > 0) {
                     rawPrice.value = finalTargetPrice;
-                    uploadStatus.innerText = "✅ Đã nhận diện chính xác dòng Tổng giá tiền!";
-                    uploadStatus.style.color = "#27ae60";
+                    uploadStatus.innerText = "✅ Quét thành công: " + new Intl.NumberFormat('vi-VN').format(finalTargetPrice) + "đ";
+                    uploadStatus.style.color = "#16a34a";
                     handleUpdate();
                 } else {
-                    uploadStatus.innerText = "❌ Không quét được giá, vui lòng điền tay!";
-                    uploadStatus.style.color = "#c0392b";
+                    uploadStatus.innerText = "❌ Chưa nhận diện được giá, vui lòng nhập tay!";
+                    uploadStatus.style.color = "#dc2626";
                 }
             })
             .catch(() => {
-                uploadStatus.innerText = "❌ Lỗi đọc file ảnh!";
-                uploadStatus.style.color = "#c0392b";
+                uploadStatus.innerText = "❌ Lỗi đọc ảnh, vui lòng thử lại!";
+                uploadStatus.style.color = "#dc2626";
             });
         };
         reader.readAsDataURL(file);
@@ -439,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        copyBtn.innerText = "Sao Chép Tin Nhắn Báo Giá";
+        copyBtn.innerText = "📋 Sao Chép Báo Giá";
         copyBtn.classList.remove('copied');
 
         let inputPrice = parseFloat(rawPrice.value);
@@ -451,7 +524,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const numInfant = Math.max(0, parseInt(paxInfant.value) || 0);
 
         const totalPeople = numAdult + numChild + numInfant;
-
         const ticketType = document.querySelector('input[name="ticketType"]:checked').value;
         const airlineType = document.querySelector('input[name="airlineType"]:checked').value;
         const priceInputType = document.querySelector('input[name="priceInputType"]:checked').value;
@@ -460,13 +532,15 @@ document.addEventListener('DOMContentLoaded', function () {
         let totalInfantPrice = singleInfantPrice * numInfant;
 
         let singleAdultRawPrice = inputPrice;
+        let originalTotal = inputPrice;
 
         if (priceInputType === "total") {
             let priceWithoutInfant = inputPrice - totalInfantPrice;
             if (priceWithoutInfant < 0) priceWithoutInfant = 0;
-            
             let shareFactor = numAdult + (numChild * 0.7);
             singleAdultRawPrice = priceWithoutInfant / shareFactor;
+        } else {
+            originalTotal = (singleAdultRawPrice * numAdult) + (singleAdultRawPrice * 0.7 * numChild) + totalInfantPrice;
         }
 
         let singleAdultPrice = Math.floor((singleAdultRawPrice * (1 - (discount / 100))) / 1000) * 1000;
@@ -480,54 +554,48 @@ document.addEventListener('DOMContentLoaded', function () {
         let totalAll = totalAdult + totalChild + totalInfant - minusAmt;
         if (totalAll < 0) totalAll = 0;
 
-        const formatter = new Intl.NumberFormat('en-US');
+        let totalSaved = originalTotal - totalAll;
+
+        const formatter = new Intl.NumberFormat('vi-VN');
         const strAdultPromo = formatter.format(singleAdultPrice) + "đ";
         const strChildPromo = formatter.format(singleChildPrice) + "đ";
         const strInfantPromo = formatter.format(singleInfantPrice) + "đ";
         const strTotalAll = formatter.format(totalAll) + "đ";
 
-        let paxDetailStr = `${numAdult} người lớn`;
-        if (numChild > 0) paxDetailStr += `, ${numChild} trẻ em`;
-        if (numInfant > 0) paxDetailStr += `, ${numInfant} em bé`;
+        let paxDetailStr = `${numAdult} Người lớn`;
+        if (numChild > 0) paxDetailStr += `, ${numChild} Trẻ em`;
+        if (numInfant > 0) paxDetailStr += `, ${numInfant} Em bé`;
 
-        // CẬP NHẬT LOGIC HÀNH LÝ THEO YÊU CẦU MỚI:
-        let baggage = "";
+        let baggageStr = "";
         if (airlineType === "vna") {
-            // VNA mặc định 2 kiện 23kg ký gửi (tổng 46kg) + 10kg xách tay cho tất cả các chặng
-            baggage = " (Gồm 10kg XT + 46kg KG [2 kiện, mỗi kiện 23kg])";
+            baggageStr = "10kg xách tay + 46kg ký gửi (2 kiện, mỗi kiện 23kg)";
         } else if (airlineType === "vj") {
-            // Vietjet lấy giá trị động từ cụm nút bấm (20kg hoặc 40kg)
             const vjBgValue = document.querySelector('input[name="vjBaggage"]:checked').value;
-            baggage = ` (Gồm 7kg XT + ${vjBgValue}kg KG)`;
+            baggageStr = `7kg xách tay + ${vjBgValue}kg ký gửi`;
         }
 
-        const title = (ticketType === "khu_hoi") ? "Khứ hồi" : "Một chiều";
+        const tripTitle = (ticketType === "khu_hoi") ? "Khứ hồi" : "Một chiều";
+        let routeLabel = (detectedFlightInfo && detectedFlightInfo.route) ? `${detectedFlightInfo.route} ` : "";
 
-        let routeLabel = (detectedFlightInfo && detectedFlightInfo.route) ? detectedFlightInfo.route : "";
-        let message = `✈️ BÁO GIÁ VÉ: ${routeLabel} (${title})\n`;
-        
-        if (priceInputType === "total") {
-            message += `👥 Đoàn: ${paxDetailStr}\n`;
-        } else {
-            message += `👥 Số lượng: ${paxDetailStr}\n`;
-        }
+        let message = `✈️ BÁO GIÁ VÉ MÁY BAY: ${routeLabel}(${tripTitle})\n`;
+        message += `👥 Số lượng: ${paxDetailStr}\n`;
         
         if (detectedFlightInfo && detectedFlightInfo.flightCodes) {
-            message += `- Chuyến bay: ${detectedFlightInfo.flightCodes}\n`;
+            message += `🛫 Chuyến bay: ${detectedFlightInfo.flightCodes}\n`;
         }
-        
+
         if (priceInputType === "total") {
-            message += `- Giá gốc hệ thống cả đoàn: ${formatter.format(inputPrice)}đ\n`;
+            message += `• Giá niêm yết hệ thống: ${formatter.format(inputPrice)}đ/cả đoàn\n`;
         } else {
-            message += `- Giá gốc hệ thống: ${formatter.format(inputPrice)}đ/vé NL\n`;
+            message += `• Giá niêm yết hệ thống: ${formatter.format(inputPrice)}đ/vé NL\n`;
         }
-        message += `- Ưu đãi đại lý: Giảm ngay ${discount}%${baggage}\n\n`;
         
+        message += `• Ưu đãi đại lý: Giảm ${discount}%\n\n`;
         message += `💸 Chi tiết giá vé sau giảm:\n`;
         message += `+ Người lớn: ${strAdultPromo} x ${numAdult} = ${formatter.format(totalAdult)}đ\n`;
         
         if (numChild > 0) {
-            message += `+ Trẻ em (2-12t): ${strChildPromo} x ${numChild} = ${formatter.format(totalChild)}đ\n`;
+            message += `+ Trẻ em (2-11t): ${strChildPromo} x ${numChild} = ${formatter.format(totalChild)}đ\n`;
         }
         if (numInfant > 0) {
             message += `+ Em bé (<2t): ${strInfantPromo} x ${numInfant} = ${formatter.format(totalInfant)}đ\n`;
@@ -536,13 +604,19 @@ document.addEventListener('DOMContentLoaded', function () {
             message += `+ Giảm thêm tổng bill: -${formatter.format(minusAmt)}đ\n`;
         }
 
-        if (priceInputType === "total") {
-            message += `\n💰 Tổng giá trọn đoàn (${totalPeople} người): ${strTotalAll}\n`;
+        message += `\n💰 TỔNG THANH TOÁN: ${strTotalAll}`;
+        if (totalSaved > 0) {
+            message += ` (Tiết kiệm ${formatter.format(totalSaved)}đ)\n`;
         } else {
-            message += `\n💰 Tổng giá vé (${totalPeople} người): ${strTotalAll}\n`;
+            message += `\n`;
         }
-        message += `(Cam kết không phát sinh, hỗ trợ giữ chỗ miễn phí ạ!)`;
-        
+
+        if (baggageStr) {
+            message += `🧳 Hành lý: ${baggageStr}\n`;
+        }
+        message += `✅ Cam kết trọn gói, không phát sinh chi phí\n`;
+        message += `⏳ Em có hỗ trợ giữ chỗ miễn phí để anh/chị cân nhắc ạ!`;
+
         templateOutput.value = message;
     }
 
@@ -552,6 +626,10 @@ document.addEventListener('DOMContentLoaded', function () {
         navigator.clipboard.writeText(templateOutput.value).then(() => {
             copyBtn.innerText = "✓ Đã Sao Chép Báo Giá!";
             copyBtn.classList.add('copied');
+            setTimeout(() => {
+                copyBtn.innerText = "📋 Sao Chép Báo Giá";
+                copyBtn.classList.remove('copied');
+            }, 2500);
         });
     }
 });
