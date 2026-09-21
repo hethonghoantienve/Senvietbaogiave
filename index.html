@@ -4,6 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Báo Giá Vé Máy Bay</title>
+    
+    <!-- Script kiểm tra và chặn IP Campuchia (KH) ngay khi tải trang -->
+    <script>
+    (async function checkGeoBlock() {
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            if (data && data.country_code === 'KH') {
+                document.documentElement.innerHTML = `
+                    <head><title>403 Forbidden</title></head>
+                    <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f8fafc;color:#dc2626;">
+                        <div style="text-align:center;padding:20px;">
+                            <h1 style="font-size:36px;margin-bottom:8px;">403 Forbidden</h1>
+                            <p style="color:#64748b;font-size:15px;">Truy cập bị từ chối từ vị trí của bạn.</p>
+                        </div>
+                    </body>
+                `;
+                window.stop();
+            }
+        } catch (e) {
+            // Tiếp tục cho ứng dụng chạy nếu kết nối API kiểm tra IP gặp trục trặc
+        }
+    })();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         * { box-sizing: border-box; }
@@ -180,7 +205,6 @@
     </style>
 </head>
 <body>
-
 <div>
     <h2>✈️ Báo Giá Vé Nhanh</h2>
     
@@ -381,11 +405,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const reader = new FileReader();
         reader.onload = function() {
-            // Sử dụng trực tiếp ảnh gốc để OCR giữ nguyên độ sắc nét
             Tesseract.recognize(reader.result, 'eng')
             .then(({ data: { text } }) => {
                 const cleanText = cleanVN(text).replace(/\s+/g, ' ');
-                
+
                 // 1. Nhận diện hãng bay
                 if (cleanText.includes("vietnam") || cleanText.includes("vna") || cleanText.includes("vn3") || cleanText.includes("vn ")) {
                     document.getElementById('airlineVNA').checked = true;
@@ -416,17 +439,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     };
                 }
 
-                // 3. Trích xuất toàn bộ các số tiền hợp lệ có cấu trúc xx,xxx,000
+                // 3. Trích xuất các số tiền hợp lệ
                 const lines = text.split('\n');
                 let extractedPrices = [];
 
                 for (let line of lines) {
-                    // Match các cụm số có dạng chuẩn phân cách hàng nghìn
                     let matches = line.match(/\b\d{1,3}([.,]\d{3}){1,2}\b/g);
                     if (matches) {
                         matches.forEach(m => {
                             let val = parseFloat(m.replace(/[.,]/g, ''));
-                            // Giới hạn trong khoảng tiền vé thực tế (500k đến 60 triệu)
                             if (val >= 500000 && val <= 60000000) {
                                 extractedPrices.push(val);
                             }
@@ -435,7 +456,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 extractedPrices = [...new Set(extractedPrices)];
-
                 let finalTargetPrice = 0;
 
                 // Quy tắc 1: Kiểm tra tổng 2 số (Vé người lớn + Thuế phí = Tổng)
@@ -444,7 +464,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (let j = 0; j < extractedPrices.length; j++) {
                             if (i !== j) {
                                 let sum = extractedPrices[i] + extractedPrices[j];
-                                // Nếu số tổng có mặt trong danh sách quét được
                                 if (extractedPrices.includes(sum)) {
                                     finalTargetPrice = sum;
                                     break;
@@ -454,8 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (finalTargetPrice > 0) break;
                     }
 
-                    // Quy tắc 2: Nếu OCR đọc được 2 số nhỏ (8.739.000 và 8.416.000) nhưng bị mất/mờ số tổng màu cam
-                    // Tự động cộng 2 số đầu tiên thuộc hàng triệu
+                    // Quy tắc 2: Tự động cộng 2 số đầu tiên thuộc hàng triệu
                     if (finalTargetPrice === 0) {
                         let validParts = extractedPrices.filter(p => p >= 1000000);
                         if (validParts.length >= 2) {
@@ -505,7 +523,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const numChild = Math.max(0, parseInt(paxChild.value) || 0);
         const numInfant = Math.max(0, parseInt(paxInfant.value) || 0);
 
-        const totalPeople = numAdult + numChild + numInfant;
         const ticketType = document.querySelector('input[name="ticketType"]:checked').value;
         const airlineType = document.querySelector('input[name="airlineType"]:checked').value;
         const priceInputType = document.querySelector('input[name="priceInputType"]:checked').value;
