@@ -189,7 +189,7 @@
       position: relative;
     }
 
-    /* HEADER BÁO GIÁ ĐỔI MÀU THEO HÃNG */
+    /* HEADER BÁO GIÁ */
     .quote-header {
       background: linear-gradient(135deg, #071e3d 0%, #153e75 100%);
       color: #ffffff;
@@ -248,6 +248,11 @@
       align-items: center;
       margin-bottom: 8px;
     }
+    .segment-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .segment-badge {
       display: inline-flex;
       align-items: center;
@@ -259,6 +264,18 @@
       padding: 3px 8px;
       border-radius: 6px;
       text-transform: uppercase;
+    }
+    .segment-airline-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .segment-baggage-tag {
       font-size: 0.75rem;
@@ -437,7 +454,7 @@
     <div class="paste-zone" id="pasteZone">
       <i class="fa-solid fa-paste"></i>
       <p id="pasteStatusText">BẤM VÀO ĐÂY & NHẤN CTRL + V ĐỂ DÁN ẢNH VÉ</p>
-      <span>AI tự động nhận hãng, đổi màu & bóc tách giá siêu tốc (1-2s)</span>
+      <span>AI tự động nhận diện hãng, đổi màu & bóc tách giá siêu tốc (1-2s)</span>
       <input type="file" id="fileInput" accept="image/*">
       
       <!-- LOADING AI -->
@@ -491,8 +508,8 @@
 
     <!-- TÍNH GIÁ ĐIỀN TAY -->
     <div class="section-title">
-      <span><i class="fa-solid fa-users"></i> Số Người & Giá Vé Điền Tay</span>
-      <span style="font-size: 0.72rem; color: #dc2626; font-weight: 700;">(Vé + Thuế) &minus; 35%</span>
+      <span><i class="fa-solid fa-users"></i> Số Người & Giá Vé</span>
+      <span style="font-size: 0.72rem; color: #dc2626; font-weight: 700;" id="panelDiscountLabel">(Vé + Thuế) &minus; 35%</span>
     </div>
     
     <!-- 1. NGƯỜI LỚN -->
@@ -560,8 +577,8 @@
     <!-- % GIẢM VÀ TỔNG GỐC -->
     <div class="form-row">
       <div class="form-group">
-        <label>3. % Giảm Trên Tổng</label>
-        <input type="number" id="discountPercent" value="35" oninput="renderQuote()">
+        <label>% Giảm Trên Tổng</label>
+        <input type="number" id="discountPercent" value="35" min="0" max="100" oninput="renderQuote()">
       </div>
       <div class="form-group">
         <label>Tổng Bill Gốc Ban Đầu</label>
@@ -671,7 +688,7 @@
                 <span id="viewSumInitial" style="font-weight: 700;">8.070.000 đ</span>
               </div>
               <div class="p-row disc" id="viewDiscountRow">
-                <span>Mã giảm giá (-35% tổng):</span>
+                <span id="viewDiscountLabel">Mã giảm giá (-35% tổng):</span>
                 <span id="viewDiscountAmount">- 2.824.500 đ</span>
               </div>
 
@@ -692,7 +709,7 @@
         <!-- WATERMARK -->
         <div class="card-watermark">
           <div>* Báo giá có hiệu lực trong thời gian giữ chỗ của Hãng.</div>
-          <div style="font-weight: 700; color: #475569;">TỔNG ĐẠI LÝ VÉ MÁY BAY CHUYÊN NGHIỆP</div>
+          <div style="font-weight: 700; color: #475569;">TỔNG ĐẠI LÝ VÉ MÁY BAY SEN VIỆT GROUP</div>
         </div>
 
       </div>
@@ -704,41 +721,16 @@
 <script>
   // BẢNG MÀU THƯƠNG HIỆU THEO TỪNG HÃNG
   const AIRLINE_THEMES = {
-    "vietjet": {
-      code: "VJ",
-      headerBg: "linear-gradient(135deg, #b91c1c 0%, #dc2626 100%)",
-      badgeColor: "#dc2626"
-    },
-    "vietnam airlines": {
-      code: "VN",
-      headerBg: "linear-gradient(135deg, #072a4d 0%, #005a9c 100%)",
-      badgeColor: "#00467f"
-    },
-    "bamboo": {
-      code: "QH",
-      headerBg: "linear-gradient(135deg, #065f46 0%, #059669 100%)",
-      badgeColor: "#047857"
-    },
-    "vietravel": {
-      code: "VU",
-      headerBg: "linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)",
-      badgeColor: "#d97706"
-    },
-    "sun phu quoc": {
-      code: "9G",
-      headerBg: "linear-gradient(135deg, #7c2d12 0%, #c2410c 100%)",
-      badgeColor: "#c2410c"
-    },
-    "eva": {
-      code: "BR",
-      headerBg: "linear-gradient(135deg, #064e3b 0%, #047857 100%)",
-      badgeColor: "#047857"
-    },
-    "cathay": {
-      code: "CX",
-      headerBg: "linear-gradient(135deg, #134e4a 0%, #0f766e 100%)",
-      badgeColor: "#0f766e"
-    }
+    "vietjet": { code: "VJ", headerBg: "linear-gradient(135deg, #b91c1c 0%, #dc2626 100%)", badgeColor: "#dc2626" },
+    "vietnam airlines": { code: "VN", headerBg: "linear-gradient(135deg, #072a4d 0%, #005a9c 100%)", badgeColor: "#00467f" },
+    "bamboo": { code: "QH", headerBg: "linear-gradient(135deg, #065f46 0%, #059669 100%)", badgeColor: "#047857" },
+    "vietravel": { code: "VU", headerBg: "linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)", badgeColor: "#d97706" },
+    "sun phu quoc": { code: "9G", headerBg: "linear-gradient(135deg, #7c2d12 0%, #c2410c 100%)", badgeColor: "#c2410c" },
+    "eva": { code: "BR", headerBg: "linear-gradient(135deg, #064e3b 0%, #047857 100%)", badgeColor: "#047857" },
+    "cathay": { code: "CX", headerBg: "linear-gradient(135deg, #134e4a 0%, #0f766e 100%)", badgeColor: "#0f766e" },
+    "qantas": { code: "QF", headerBg: "linear-gradient(135deg, #991b1b 0%, #dc2626 100%)", badgeColor: "#dc2626" },
+    "singapore": { code: "SQ", headerBg: "linear-gradient(135deg, #1e3a8a 0%, #d97706 100%)", badgeColor: "#1e3a8a" },
+    "korean": { code: "KE", headerBg: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)", badgeColor: "#0284c7" }
   };
 
   function getThemeByAirline(airlineName, fallbackCode) {
@@ -766,6 +758,8 @@
     legs: [
       {
         badge: "CHIỀU ĐI",
+        airlineName: "VietJet Air",
+        airlineCode: "VJ",
         fromCity: "Tokyo (NRT)",
         fromTerm: "",
         toCity: "Hà Nội (HAN)",
@@ -778,8 +772,9 @@
       },
       {
         badge: "CHIỀU VỀ",
+        airlineName: "VietJet Air",
+        airlineCode: "VJ",
         fromCity: "Hà Nội (HAN)",
-        fromTerm: "",
         toCity: "Tokyo (NRT)",
         toTerm: "",
         date: "T.Năm 07/01/2027",
@@ -821,7 +816,6 @@
     renderQuote();
   }
 
-  // CẬP NHẬT KHI ĐIỀN TAY HÀNH LÝ
   function onBaggageManualChange() {
     ticketData.carryOn = document.getElementById('carryOnBaggage').value.trim();
     ticketData.checked = document.getElementById('checkedBaggage').value.trim();
@@ -880,6 +874,10 @@
     const discountAmount = initialTotal * (discountPercent / 100);
     const finalTotal = Math.max(0, initialTotal - discountAmount);
 
+    // Đồng bộ nhãn giảm giá ở form và bảng giá theo % nhập vào
+    const discLabelElem = document.getElementById('panelDiscountLabel');
+    if (discLabelElem) discLabelElem.innerHTML = `(Vé + Thuế) &minus; ${discountPercent}%`;
+
     document.getElementById('airlineName').value = ticketData.airline;
     document.getElementById('viewAirline').innerText = ticketData.airline;
     document.getElementById('viewTripDesc').innerText = ticketData.tripDesc || "Hành Trình";
@@ -888,7 +886,7 @@
       ticketData.tripType === 'oneway' ? 'MỘT CHIỀU' : 
       ticketData.tripType === 'transit' ? 'NỐI CHUYẾN' : 'KHỨ HỒI';
 
-    // HIỂN THỊ HÀNH LÝ ĐÃ ĐIỀN TAY
+    // Hiển thị hành lý điền tay
     const carryOn = ticketData.carryOn || "7kg xách tay";
     const checked = ticketData.checked || "Không có ký gửi";
     document.getElementById('carryOnBaggage').value = carryOn;
@@ -897,7 +895,7 @@
     const fullBaggageStr = `${carryOn} + ${checked}`;
     document.getElementById('viewBaggageText').innerText = fullBaggageStr;
 
-    // CẬP NHẬT MÀU VÀ CHỮ HUY HIỆU THEO TỪNG HÃNG
+    // Giao diện Header theo Hãng
     const badgeText = (ticketData.airlineCode || "VJ").toUpperCase().trim();
     const theme = getThemeByAirline(ticketData.airline, badgeText);
 
@@ -940,11 +938,14 @@
     document.getElementById('totalRawPreview').value = formatVND(initialTotal);
     document.getElementById('viewSumInitial').innerText = formatVND(initialTotal);
     document.getElementById('viewOldTotal').innerText = formatVND(initialTotal);
+    
+    // Cập nhật text % giảm giá tự động không bị fix cứng
+    document.getElementById('viewDiscountLabel').innerText = `Mã giảm giá (-${discountPercent}% tổng):`;
     document.getElementById('viewDiscountAmount').innerText = `- ${formatVND(discountAmount)}`;
     document.getElementById('viewPromoTag').innerHTML = `<i class="fa-solid fa-bolt"></i> GIẢM ${discountPercent}%`;
     document.getElementById('viewFinalTotal').innerText = formatVND(finalTotal);
 
-    // Render danh sách chặng bay kèm thẻ Hành lý
+    // Render danh sách chặng bay
     const container = document.getElementById('segmentsContainer');
     container.innerHTML = '';
 
@@ -957,11 +958,19 @@
         return;
       }
 
+      // Xác định nếu chặng bay này khác hãng chính
+      const legAirline = leg.airlineName || ticketData.airline;
+      const legCode = (leg.airlineCode || (leg.flightNo ? leg.flightNo.replace(/[^A-Za-z]/g, '').slice(0, 2) : ticketData.airlineCode) || "").toUpperCase();
+      const isDifferentAirline = legAirline.toLowerCase() !== ticketData.airline.toLowerCase();
+
       const card = document.createElement('div');
       card.className = 'segment-card';
       card.innerHTML = `
         <div class="segment-badge-row">
-          <div class="segment-badge"><i class="fa-solid fa-plane"></i> ${leg.badge || 'CHẶNG BAY'}</div>
+          <div class="segment-badge-group">
+            <div class="segment-badge"><i class="fa-solid fa-plane"></i> ${leg.badge || 'CHẶNG BAY'}</div>
+            ${legAirline ? `<div class="segment-airline-badge" style="${isDifferentAirline ? 'background:#fef2f2; border-color:#fca5a5; color:#b91c1c;' : ''}"><i class="fa-solid fa-paper-plane"></i> ${legAirline} (${legCode})</div>` : ''}
+          </div>
           <div class="segment-baggage-tag"><i class="fa-solid fa-suitcase-rolling"></i> ${fullBaggageStr}</div>
         </div>
         <div class="segment-route-grid">
@@ -988,7 +997,7 @@
     });
   }
 
-  // NÉN ẢNH ĐỂ QUÉT TỐC ĐỘ CAO (1-2s)
+  // NÉN ẢNH
   function compressImageFast(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -1019,7 +1028,7 @@
     });
   }
 
-  // GỌI GEMINI AI CHUYÊN SÂU CHỈ BÓC CHUYẾN BAY & GIÁ VÉ (KHÔNG CAN THIỆP HÀNH LÝ ĐIỀN TAY)
+  // GỌI GEMINI AI
   async function callGeminiVisionAI(base64Data, mimeType) {
     const apiKey = document.getElementById('geminiApiKey').value.trim() || localStorage.getItem('my_gemini_api_key');
     if (!apiKey) {
@@ -1030,30 +1039,34 @@
 
     const promptText = `Trích xuất thông tin vé máy bay này thành JSON duy nhất:
 {
-  "airline": "Tên đầy đủ hãng (ví dụ: VietJet Air, Vietnam Airlines, Bamboo Airways...)",
-  "airlineCode": "Mã IATA 2 ký tự của hãng (ví dụ: VJ, VN, QH, VU, CX, BR, KE, JL, 9G...)",
+  "airline": "Tên hãng chính hoặc hãng xuất vé (ví dụ: Vietnam Airlines, VietJet Air...)",
+  "airlineCode": "Mã IATA 2 ký tự (ví dụ: VN, VJ, QH...)",
   "tripType": "oneway hoặc transit hoặc roundtrip",
-  "tripDesc": "Mô tả ngắn gọn",
+  "tripDesc": "Mô tả ngắn gọn (ví dụ: Khứ hồi Sydney - Hồ Chí Minh)",
   "adultCount": 1,
   "adultFare": 0,
   "adultTax": 0,
   "legs": [
     {
-      "badge": "CHIỀU ĐI hoặc CHUYẾN BAY MỘT CHIỀU",
-      "fromCity": "Điểm đi kèm IATA",
-      "fromTerm": "Ga đi",
-      "toCity": "Điểm đến kèm IATA",
-      "toTerm": "Ga đến",
-      "date": "Ngày",
-      "time": "Giờ",
-      "flightNo": "Mã chuyến",
+      "badge": "CHIỀU ĐI hoặc CHIỀU VỀ hoặc CHẶNG 1...",
+      "airlineName": "Tên đầy đủ hãng thực hiện chuyến này (ví dụ: Vietnam Airlines, Qantas, Jetstar, Cathay...)",
+      "airlineCode": "Mã IATA (ví dụ: VN, QF, JQ, CX...)",
+      "fromCity": "Điểm đi kèm IATA (ví dụ: Sydney (SYD))",
+      "fromTerm": "Ga đi (ví dụ: T1)",
+      "toCity": "Điểm đến kèm IATA (ví dụ: Hồ Chí Minh (SGN))",
+      "toTerm": "Ga đến (ví dụ: T2)",
+      "date": "Ngày (ví dụ: T.Sáu 18/12)",
+      "time": "Giờ (ví dụ: 11:50 - 16:20)",
+      "flightNo": "Mã chuyến (ví dụ: VN772 hoặc QF5554)",
       "aircraft": "Loại máy bay",
       "duration": "Thời gian bay"
     }
   ]
 }
-Nếu có nối chuyến thêm: {"isTransitBar": true, "transitText": "Nối chuyến... tại..."}.
-adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy.`;
+Lưu ý quan trọng:
+- Nếu các chặng bay do các hãng hàng không khác nhau khai thác (ví dụ chuyến đi Vietnam Airlines VN, chuyến về Qantas QF...), hãy điền chính xác airlineName và airlineCode tương ứng của chặng đó.
+- Nếu có nối chuyến thêm phần tử: {"isTransitBar": true, "transitText": "Nối chuyến... tại..."}.
+- adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy, không dùng markdown block.`;
 
     const candidateModels = ["gemini-2.5-flash", "gemini-3.8-flash", "gemini-1.5-flash"];
     let lastError = null;
@@ -1107,12 +1120,11 @@ adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy.`;
 
       console.log("KẾT QUẢ AI BÓC TÁCH:\n", result);
 
-      // Cập nhật thông tin chuyến bay nhưng giữ nguyên hành lý người dùng đã điền
-      ticketData.airline = result.airline;
-      ticketData.airlineCode = result.airlineCode || "VJ";
+      ticketData.airline = result.airline || ticketData.airline;
+      ticketData.airlineCode = result.airlineCode || "VN";
       ticketData.tripType = result.tripType || "roundtrip";
       ticketData.tripDesc = result.tripDesc || "Hành Trình";
-      ticketData.legs = result.legs;
+      ticketData.legs = result.legs || [];
 
       document.getElementById('airlineBadgeText').value = ticketData.airlineCode;
       if (result.adultCount !== undefined) document.getElementById('adultCount').value = result.adultCount || 1;
@@ -1170,7 +1182,7 @@ adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy.`;
     }
   });
 
-  // COPY TRỰC TIẾP ẢNH BÁO GIÁ ĐỂ GỬI ZALO
+  // COPY TRỰC TIẾP ẢNH BÁO GIÁ
   async function copyQuoteImage() {
     const card = document.getElementById('quoteCard');
     const btn = document.getElementById('btnCopyImage');
@@ -1204,21 +1216,23 @@ adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy.`;
   // TẢI ẢNH PNG
   function exportQuoteImage() {
     const card = document.getElementById('quoteCard');
+    const discountPercent = document.getElementById('discountPercent').value;
     html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(canvas => {
       const link = document.createElement('a');
-      link.download = `Bao_Gia_Ve_May_Bay_Giam35.png`;
+      link.download = `Bao_Gia_Ve_May_Bay_Giam${discountPercent}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     });
   }
 
-  // COPY TIN NHẮN ZALO
+  // COPY TIN NHẮN ZALO ĐẦY ĐỦ CÁC CHẶNG & TỪNG HÃNG
   function copyZaloText() {
     const adultCount = document.getElementById('adultCount').value;
     const childCount = document.getElementById('childCount').value;
     const infantCount = document.getElementById('infantCount').value;
     const carryOn = document.getElementById('carryOnBaggage').value;
     const checked = document.getElementById('checkedBaggage').value;
+    const discountPercent = document.getElementById('discountPercent').value;
 
     let paxText = `• Người lớn: ${adultCount} khách (${document.getElementById('viewAdultTotal').innerText})`;
     if (parseInt(childCount) > 0) {
@@ -1228,10 +1242,24 @@ adultFare, adultTax là số nguyên. Chỉ trả về JSON thuần túy.`;
       paxText += `\n• Em bé (<2t): ${infantCount} bé (${document.getElementById('viewInfantTotal').innerText})`;
     }
 
-    const text = `✈️ BÁO GIÁ VÉ MÁY BAY (${ticketData.airline.toUpperCase()}) - ƯU ĐÃI GIẢM 35%
-Chặng bay: ${ticketData.legs[0].fromCity} ➔ ${ticketData.legs[0].toCity}
-Ngày bay: ${ticketData.legs[0].date} | Giờ: ${ticketData.legs[0].time}
-Chuyến: ${ticketData.legs[0].flightNo} (${ticketData.legs[0].aircraft})
+    // Liệt kê chi tiết từng chặng bay
+    let legsText = '';
+    ticketData.legs.forEach((leg, idx) => {
+      if (leg.isTransitBar) {
+        legsText += `\n⏳ ${leg.transitText}\n`;
+        return;
+      }
+      const legAirline = leg.airlineName || ticketData.airline;
+      legsText += `
+📍 [${leg.badge || `CHẶNG ${idx + 1}`}] - ${legAirline}
+• Tuyến: ${leg.fromCity} ➔ ${leg.toCity}
+• Ngày bay: ${leg.date} | Giờ: ${leg.time}
+• Chuyến bay: ${leg.flightNo} (${leg.aircraft || 'Tiêu chuẩn'}) - ${leg.duration || 'Bay thẳng'}`;
+    });
+
+    const text = `✈️ BÁO GIÁ VÉ MÁY BAY - ƯU ĐÃI GIẢM ${discountPercent}%
+${ticketData.tripDesc ? `(${ticketData.tripDesc})` : ''}
+${legsText}
 
 🧳 TIÊU CHUẨN HÀNH LÝ:
 • Xách tay: ${carryOn}
@@ -1241,14 +1269,16 @@ Chuyến: ${ticketData.legs[0].flightNo} (${ticketData.legs[0].aircraft})
 ${paxText}
 ----------------------------------------
 • Tổng bill ban đầu: ${document.getElementById('viewSumInitial').innerText}
-• Giảm 35% trên tổng: ${document.getElementById('viewDiscountAmount').innerText}
+• Giảm ${discountPercent}% trên tổng: ${document.getElementById('viewDiscountAmount').innerText}
 👉 TỔNG THANH TOÁN: ${document.getElementById('viewFinalTotal').innerText}
 (Trọn gói toàn bộ vé, thuế phí sân bay và hành lý theo tiêu chuẩn)
 
-⚠️ Báo giá áp dụng theo thời điểm giữ chỗ thực tế. Anh/Chị chốt sớm để giữ chỗ nhé!`;
+⚠️ Báo giá áp dụng theo thời điểm kiểm tra giữ chỗ thực tế. Anh/Chị chốt sớm để giữ giá tốt nhất nhé!`;
 
     navigator.clipboard.writeText(text).then(() => {
-      alert('Đã sao chép tin nhắn Zalo!');
+      alert('Đã sao chép tin nhắn Zalo đầy đủ tất cả các chặng!');
+    }).catch(() => {
+      alert('Lỗi quyền truy cập clipboard!');
     });
   }
 </script>
