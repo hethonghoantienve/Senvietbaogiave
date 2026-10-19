@@ -291,12 +291,12 @@
       gap: 5px;
     }
 
-    /* SỬA LẠI KHỐI ĐƯỜNG BAY ĐỂ KHÔNG BỊ SÁT CHỮ */
+    /* KHỐI ĐƯỜNG BAY CÂN ĐỐI */
     .segment-route-grid {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      margin-bottom: 16px; /* Cách xa hàng giờ bay bên dưới */
+      margin-bottom: 16px;
     }
     .node-title { font-size: 1.2rem; font-weight: 800; color: var(--primary-navy); }
     .node-sub { font-size: 0.8rem; color: #475569; font-weight: 600; margin-top: 2px; }
@@ -310,7 +310,7 @@
       font-size: 0.76rem; 
       font-weight: 700; 
       color: #64748b; 
-      margin-bottom: 8px; /* Tách biệt với máy bay */
+      margin-bottom: 8px; 
     }
     .flight-line { 
       height: 2px; 
@@ -329,7 +329,6 @@
       font-size: 0.88rem;
     }
 
-    /* ĐỊNH DẠNG HÀNG GIỜ BAY DƯỚI */
     .flight-bottom-bar {
       display: grid;
       grid-template-columns: 1.15fr 1.2fr 1.35fr;
@@ -359,23 +358,36 @@
     /* FOOTER & BẢNG GIÁ */
     .quote-footer {
       display: grid;
-      grid-template-columns: 1fr 1.08fr;
+      grid-template-columns: 1.08fr 1fr;
       gap: 16px;
       margin-top: 14px;
     }
     @media(max-width: 700px) { .quote-footer { grid-template-columns: 1fr; } }
 
+    /* KHỐI ĐẶC QUYỀN */
     .included-box {
-      background: #f1f5f9;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 12px;
-      padding: 14px;
+      padding: 16px 18px;
       font-size: 0.78rem;
       color: #334155;
-      line-height: 1.5;
+      line-height: 1.55;
+    }
+    .included-header {
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      color: var(--primary-navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .included-box ul { list-style: none; }
-    .included-box li { margin-bottom: 5px; display: flex; align-items: flex-start; gap: 8px; }
-    .included-box li i { color: #16a34a; font-size: 0.85rem; margin-top: 3px; }
+    .included-box li { margin-bottom: 7px; display: flex; align-items: flex-start; gap: 9px; }
+    .included-box li:last-child { margin-bottom: 0; }
+    .included-box li i { font-size: 0.88rem; margin-top: 2px; }
 
     /* CARD GIÁ */
     .price-banner {
@@ -527,9 +539,9 @@
       </div>
     </div>
 
-    <!-- KHỐI ĐỔI VÉ MIỄN PHÍ THEO TỪNG CHẶNG -->
+    <!-- KHỐI ĐỔI VÉ THEO TỪNG CHẶNG -->
     <div class="section-title">
-      <span><i class="fa-solid fa-arrow-rotate-right"></i> Đổi Vé Miễn Phí Theo Chặng</span>
+      <span><i class="fa-solid fa-arrow-rotate-right"></i> Đổi Vé Linh Hoạt Theo Chặng</span>
       <span style="font-size: 0.72rem; color: #2563eb; font-weight: 700;">Chính sách linh hoạt</span>
     </div>
 
@@ -537,11 +549,11 @@
       <div class="form-group">
         <label>Chọn Áp Dụng Đổi Vé</label>
         <select id="changeTicketMode" onchange="onChangeTicketModeChange(this.value)">
-          <option value="all" selected>Miễn phí đổi vé tất cả các chặng</option>
-          <option value="outbound">Miễn phí đổi vé Chiều Đi</option>
-          <option value="inbound">Miễn phí đổi vé Chiều Về</option>
+          <option value="all" selected>Hỗ trợ đổi vé linh hoạt tất cả các chặng</option>
+          <option value="outbound">Hỗ trợ đổi vé Chiều Đi linh hoạt</option>
+          <option value="inbound">Hỗ trợ đổi vé Chiều Về linh hoạt</option>
           <option value="custom">Tự nhập ghi chú riêng</option>
-          <option value="none">Không hỗ trợ / Theo điều kiện vé gốc</option>
+          <option value="none">Theo điều kiện tiêu chuẩn của Hạng vé</option>
         </select>
       </div>
       <div class="form-group">
@@ -553,7 +565,7 @@
     <!-- TÍNH GIÁ ĐIỀN TAY -->
     <div class="section-title">
       <span><i class="fa-solid fa-users"></i> Số Người & Giá Vé</span>
-      <span style="font-size: 0.72rem; color: #dc2626; font-weight: 700;" id="panelDiscountLabel">(Vé + Thuế) &minus; 35%</span>
+      <span style="font-size: 0.72rem; color: #dc2626; font-weight: 700;" id="panelDiscountLabel">Đặc quyền trợ giá 35%</span>
     </div>
     
     <!-- 1. NGƯỜI LỚN -->
@@ -621,7 +633,7 @@
     <!-- % GIẢM VÀ TỔNG GỐC -->
     <div class="form-row">
       <div class="form-group">
-        <label>% Giảm Trên Tổng</label>
+        <label>% Trợ Giá Trên Tổng</label>
         <input type="number" id="discountPercent" value="35" min="0" max="100" oninput="renderQuote()">
       </div>
       <div class="form-group">
@@ -658,7 +670,7 @@
             <div class="airline-text-badge" id="viewAirlineBadge">VJ</div>
             <div class="brand-text">
               <h1>BÁO GIÁ VÉ MÁY BAY</h1>
-              <p><span id="viewAirline">VietJet Air</span> • <span id="viewTripDesc">Khứ Hồi</span></p>
+              <p><span id="viewAirline">VietJet Air</span> • <span id="viewTripDesc">Khứ hồi Busan - Hà Nội</span></p>
             </div>
           </div>
           <div class="trip-badge" id="viewTripBadge">KHỨ HỒI</div>
@@ -668,16 +680,33 @@
         <div class="quote-body">
           <div id="segmentsContainer"></div>
 
-          <!-- FOOTER: QUYỀN LỢI & BẢNG GIÁ -->
+          <!-- FOOTER: ĐẶC QUYỀN & BẢNG GIÁ -->
           <div class="quote-footer">
             <div class="included-box">
-              <div style="font-weight: 800; margin-bottom: 6px; color: var(--primary-navy);">QUYỀN LỢI & ĐIỀU KIỆN:</div>
+              <div class="included-header">
+                <i class="fa-solid fa-crown" style="color: #d97706;"></i> ĐẶC QUYỀN HÀNH TRÌNH & DỊCH VỤ:
+              </div>
               <ul id="viewIncludedList">
-                <li id="viewBaggageIncluded"><i class="fa-solid fa-suitcase-rolling" style="color: #059669;"></i> <span>Hành lý: <strong id="viewBaggageText" style="color: #0f172a; margin-left: 2px;">7kg xách tay + 20kg ký gửi</strong></span></li>
-                <li id="viewChangeTicketLi"><i class="fa-solid fa-arrow-rotate-right" style="color: #2563eb;"></i> <span><strong style="color: #1e40af;">Hỗ trợ đổi vé:</strong> <span id="viewChangeTicketText">Miễn phí đổi vé tất cả các chặng</span></span></li>
-                <li><i class="fa-solid fa-circle-check"></i> <span>Đã bao gồm toàn bộ thuế, phí sân bay.</span></li>
-                <li><i class="fa-solid fa-circle-check"></i> <span>Hỗ trợ làm thủ tục check-in chu đáo.</span></li>
-                <li><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> <span>Vé áp dụng theo thời điểm kiểm tra giữ chỗ.</span></li>
+                <li id="viewBaggageIncluded">
+                  <i class="fa-solid fa-suitcase-rolling" style="color: #059669;"></i>
+                  <span>Hành lý chặng bay: <strong id="viewBaggageText" style="color: #0f172a; margin-left: 2px;">7kg xách tay + 20kg ký gửi</strong></span>
+                </li>
+                <li id="viewChangeTicketLi">
+                  <i class="fa-solid fa-shield-halved" style="color: #2563eb;"></i>
+                  <span><strong style="color: #1e40af;">Hỗ trợ đổi vé linh hoạt:</strong> <span id="viewChangeTicketText">Miễn phí đổi vé tất cả các chặng</span></span>
+                </li>
+                <li>
+                  <i class="fa-solid fa-receipt" style="color: #0284c7;"></i>
+                  <span>Giá trọn gói minh bạch, đã bao gồm toàn bộ thuế và phụ phí sân bay.</span>
+                </li>
+                <li>
+                  <i class="fa-solid fa-headset" style="color: #7c3aed;"></i>
+                  <span>Chăm sóc 24/7, đồng hành làm thủ tục check-in chọn vị trí ngồi đẹp.</span>
+                </li>
+                <li>
+                  <i class="fa-solid fa-hourglass-half" style="color: #d97706;"></i>
+                  <span>Ưu đãi áp dụng tương ứng theo khung thời gian giữ chỗ thực tế của Hãng.</span>
+                </li>
               </ul>
             </div>
 
@@ -686,7 +715,7 @@
               <div class="price-top-bar">
                 <span class="price-title-lbl">Chi tiết tính giá vé</span>
                 <div class="discount-tag" id="viewPromoTag">
-                  <i class="fa-solid fa-bolt"></i> GIẢM 35%
+                  <i class="fa-solid fa-crown"></i> ĐẶC QUYỀN TRỢ GIÁ 35%
                 </div>
               </div>
               
@@ -733,7 +762,7 @@
                 <span id="viewSumInitial" style="font-weight: 700;">8.070.000 đ</span>
               </div>
               <div class="p-row disc" id="viewDiscountRow">
-                <span id="viewDiscountLabel">Mã giảm giá (-35% tổng):</span>
+                <span id="viewDiscountLabel">Đặc quyền trợ giá (-35%):</span>
                 <span id="viewDiscountAmount">- 2.824.500 đ</span>
               </div>
 
@@ -905,8 +934,8 @@
   function onChangeTicketModeChange(val) {
     const noteInput = document.getElementById('changeTicketNote');
     if (val === 'none') {
-      noteInput.value = 'Theo quy định hạng vé của Hãng';
-    } else if (!noteInput.value || noteInput.value === 'Theo quy định hạng vé của Hãng') {
+      noteInput.value = 'Theo quy chế linh hoạt của Hạng vé';
+    } else if (!noteInput.value || noteInput.value === 'Theo quy chế linh hoạt của Hạng vé') {
       noteInput.value = '(Chỉ thu chênh lệch giá vé nếu có)';
     }
     renderQuote();
@@ -926,7 +955,7 @@
     } else if (mode === 'custom') {
       text = note || 'Hỗ trợ đổi vé theo yêu cầu';
     } else {
-      text = note || 'Theo điều kiện hạng vé gốc của hãng';
+      text = note || 'Áp dụng theo quy chế hạng vé tiêu chuẩn';
     }
     return text.trim();
   }
@@ -983,7 +1012,7 @@
     const finalTotal = Math.max(0, initialTotal - discountAmount);
 
     const discLabelElem = document.getElementById('panelDiscountLabel');
-    if (discLabelElem) discLabelElem.innerHTML = `(Vé + Thuế) &minus; ${discountPercent}%`;
+    if (discLabelElem) discLabelElem.innerHTML = `Đặc quyền trợ giá ${discountPercent}%`;
 
     document.getElementById('airlineName').value = ticketData.airline;
     document.getElementById('viewAirline').innerText = ticketData.airline;
@@ -1044,9 +1073,9 @@
     document.getElementById('viewSumInitial').innerText = formatVND(initialTotal);
     document.getElementById('viewOldTotal').innerText = formatVND(initialTotal);
     
-    document.getElementById('viewDiscountLabel').innerText = `Mã giảm giá (-${discountPercent}% tổng):`;
+    document.getElementById('viewDiscountLabel').innerText = `Đặc quyền trợ giá (-${discountPercent}%):`;
     document.getElementById('viewDiscountAmount').innerText = `- ${formatVND(discountAmount)}`;
-    document.getElementById('viewPromoTag').innerHTML = `<i class="fa-solid fa-bolt"></i> GIẢM ${discountPercent}%`;
+    document.getElementById('viewPromoTag').innerHTML = `<i class="fa-solid fa-crown"></i> ĐẶC QUYỀN TRỢ GIÁ ${discountPercent}%`;
     document.getElementById('viewFinalTotal').innerText = formatVND(finalTotal);
 
     const container = document.getElementById('segmentsContainer');
@@ -1295,7 +1324,7 @@ Lưu ý quan trọng:
     const discountPercent = document.getElementById('discountPercent').value;
     html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(canvas => {
       const link = document.createElement('a');
-      link.download = `Bao_Gia_Ve_May_Bay_Giam${discountPercent}.png`;
+      link.download = `Bao_Gia_Ve_May_Bay_TroGia${discountPercent}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     });
@@ -1327,34 +1356,33 @@ Lưu ý quan trọng:
       const legAirline = leg.airlineName || ticketData.airline;
       legsText += `
 📍 [${leg.badge || `CHẶNG ${idx + 1}`}] - ${legAirline}
-- Tuyến: ${leg.fromCity} ➔ ${leg.toCity}
-- Ngày bay: ${leg.date} | Giờ: ${leg.time}
+- Tuyến bay: ${leg.fromCity} ➔ ${leg.toCity}
+- Ngày bay: ${leg.date} | Giờ khởi hành: ${leg.time}
 - Chuyến bay: ${leg.flightNo} (${leg.aircraft || 'Tiêu chuẩn'}) - ${leg.duration || 'Bay thẳng'}`;
     });
 
-    const text = `✈️ BÁO GIÁ VÉ MÁY BAY - ƯU ĐÃI GIẢM ${discountPercent}%
+    const text = `✈️ BÁO GIÁ VÉ MÁY BAY CHUYÊN NGHIỆP - ĐẶC QUYỀN TRỢ GIÁ ${discountPercent}%
 ${ticketData.tripDesc ? `(${ticketData.tripDesc})` : ''}
 ${legsText}
 
-🧳 TIÊU CHUẨN HÀNH LÝ:
-- Xách tay: ${carryOn}
-- Ký gửi: ${checked}
+👑 ĐẶC QUYỀN HÀNH TRÌNH & DỊCH VỤ:
+- Hành lý chặng bay: ${carryOn} + ${checked}
+- Chính sách đổi vé: ${changeTicketStr}
+- Giá trọn gói minh bạch: Đã bao gồm trọn bộ thuế, phí sân bay và phụ thu an ninh.
+- Hỗ trợ độc quyền 24/7: Hỗ trợ làm thủ tục check-in chọn vị trí ngồi đẹp và theo sát chuyến bay.
+- Mức giá ưu đãi áp dụng tương ứng theo khung thời gian giữ chỗ thực tế của Hãng.
 
-🔄 CHÍNH SÁCH ĐỔI VÉ:
-- ${changeTicketStr}
-
-👥 THÔNG TIN HÀNH KHÁCH & GIÁ:
+👥 CHI TIẾT ĐƠN GIÁ HÀNH KHÁCH:
 ${paxText}
 ----------------------------------------
-- Tổng bill ban đầu: ${document.getElementById('viewSumInitial').innerText}
-- Giảm ${discountPercent}% trên tổng: ${document.getElementById('viewDiscountAmount').innerText}
-👉 TỔNG THANH TOÁN: ${document.getElementById('viewFinalTotal').innerText}
-(Trọn gói toàn bộ vé, thuế phí sân bay và hành lý theo tiêu chuẩn)
+- Tổng giá trị gốc ban đầu: ${document.getElementById('viewSumInitial').innerText}
+- Đặc quyền trợ giá (-${discountPercent}%): ${document.getElementById('viewDiscountAmount').innerText}
+👉 TỔNG THANH TOÁN TRỌN GÓI: ${document.getElementById('viewFinalTotal').innerText}
 
-⚠️ Báo giá áp dụng theo thời điểm kiểm tra giữ chỗ thực tế. Anh/Chị chốt sớm để giữ giá tốt nhất nhé!`;
+Anh/Chị chốt sớm để giữ mức giá ưu đãi và hành trình đẹp nhất nhé!`;
 
     navigator.clipboard.writeText(text).then(() => {
-      alert('Đã sao chép tin nhắn Zalo đầy đủ tất cả các chặng!');
+      alert('Đã sao chép tin nhắn Zalo văn phong sang trọng!');
     }).catch(() => {
       alert('Lỗi quyền truy cập clipboard!');
     });
