@@ -354,8 +354,8 @@
       line-height: 1.5;
     }
     .included-box ul { list-style: none; }
-    .included-box li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-    .included-box li i { color: #16a34a; font-size: 0.85rem; }
+    .included-box li { margin-bottom: 5px; display: flex; align-items: flex-start; gap: 8px; }
+    .included-box li i { color: #16a34a; font-size: 0.85rem; margin-top: 3px; }
 
     /* CARD GIÁ */
     .price-banner {
@@ -506,6 +506,29 @@
       </div>
     </div>
 
+    <!-- KHỐI ĐỔI VÉ MIỄN PHÍ THEO TỪNG CHẶNG -->
+    <div class="section-title">
+      <span><i class="fa-solid fa-arrow-rotate-right"></i> Đổi Vé Miễn Phí Theo Chặng</span>
+      <span style="font-size: 0.72rem; color: #2563eb; font-weight: 700;">Chính sách linh hoạt</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Chọn Áp Dụng Đổi Vé</label>
+        <select id="changeTicketMode" onchange="onChangeTicketModeChange(this.value)">
+          <option value="all" selected>Miễn phí đổi vé tất cả các chặng</option>
+          <option value="outbound">Miễn phí đổi vé Chiều Đi</option>
+          <option value="inbound">Miễn phí đổi vé Chiều Về</option>
+          <option value="custom">Tự nhập ghi chú riêng</option>
+          <option value="none">Không hỗ trợ / Theo điều kiện vé gốc</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Chi Tiết / Phí Chênh Lệch</label>
+        <input type="text" id="changeTicketNote" value="(Chỉ thu chênh lệch giá vé nếu có)" placeholder="VD: (Chỉ thu chênh lệch giá vé nếu có)..." oninput="renderQuote()">
+      </div>
+    </div>
+
     <!-- TÍNH GIÁ ĐIỀN TAY -->
     <div class="section-title">
       <span><i class="fa-solid fa-users"></i> Số Người & Giá Vé</span>
@@ -629,10 +652,11 @@
             <div class="included-box">
               <div style="font-weight: 800; margin-bottom: 6px; color: var(--primary-navy);">QUYỀN LỢI & ĐIỀU KIỆN:</div>
               <ul id="viewIncludedList">
-                <li id="viewBaggageIncluded"><i class="fa-solid fa-suitcase-rolling" style="color: #059669;"></i> Hành lý: <strong id="viewBaggageText" style="color: #0f172a; margin-left: 4px;">7kg xách tay + 20kg ký gửi</strong></li>
-                <li><i class="fa-solid fa-circle-check"></i> Đã bao gồm toàn bộ thuế, phí sân bay.</li>
-                <li><i class="fa-solid fa-circle-check"></i> Hỗ trợ làm thủ tục check-in chu đáo.</li>
-                <li><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> Vé áp dụng theo thời điểm kiểm tra giữ chỗ.</li>
+                <li id="viewBaggageIncluded"><i class="fa-solid fa-suitcase-rolling" style="color: #059669;"></i> <span>Hành lý: <strong id="viewBaggageText" style="color: #0f172a; margin-left: 2px;">7kg xách tay + 20kg ký gửi</strong></span></li>
+                <li id="viewChangeTicketLi"><i class="fa-solid fa-arrow-rotate-right" style="color: #2563eb;"></i> <span><strong style="color: #1e40af;">Hỗ trợ đổi vé:</strong> <span id="viewChangeTicketText">Miễn phí đổi vé tất cả các chặng</span></span></li>
+                <li><i class="fa-solid fa-circle-check"></i> <span>Đã bao gồm toàn bộ thuế, phí sân bay.</span></li>
+                <li><i class="fa-solid fa-circle-check"></i> <span>Hỗ trợ làm thủ tục check-in chu đáo.</span></li>
+                <li><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> <span>Vé áp dụng theo thời điểm kiểm tra giữ chỗ.</span></li>
               </ul>
             </div>
 
@@ -755,6 +779,8 @@
     tripDesc: "Khứ Hồi",
     carryOn: "7kg xách tay",
     checked: "20kg ký gửi",
+    changeTicketMode: "all",
+    changeTicketNote: "(Chỉ thu chênh lệch giá vé nếu có)",
     legs: [
       {
         badge: "CHIỀU ĐI",
@@ -820,6 +846,35 @@
     ticketData.carryOn = document.getElementById('carryOnBaggage').value.trim();
     ticketData.checked = document.getElementById('checkedBaggage').value.trim();
     renderQuote();
+  }
+
+  function onChangeTicketModeChange(val) {
+    const noteInput = document.getElementById('changeTicketNote');
+    if (val === 'none') {
+      noteInput.value = 'Theo quy định hạng vé của Hãng';
+    } else if (!noteInput.value || noteInput.value === 'Theo quy định hạng vé của Hãng') {
+      noteInput.value = '(Chỉ thu chênh lệch giá vé nếu có)';
+    }
+    renderQuote();
+  }
+
+  function getChangeTicketFullString() {
+    const mode = document.getElementById('changeTicketMode').value;
+    const note = document.getElementById('changeTicketNote').value.trim();
+    let text = '';
+
+    if (mode === 'all') {
+      text = `Miễn phí đổi vé tất cả các chặng ${note}`;
+    } else if (mode === 'outbound') {
+      text = `Miễn phí đổi vé Chiều Đi ${note}`;
+    } else if (mode === 'inbound') {
+      text = `Miễn phí đổi vé Chiều Về ${note}`;
+    } else if (mode === 'custom') {
+      text = note || 'Hỗ trợ đổi vé theo yêu cầu';
+    } else {
+      text = note || 'Theo điều kiện hạng vé gốc của hãng';
+    }
+    return text.trim();
   }
 
   function onAdultFareChange() {
@@ -894,6 +949,10 @@
 
     const fullBaggageStr = `${carryOn} + ${checked}`;
     document.getElementById('viewBaggageText').innerText = fullBaggageStr;
+
+    // Hiển thị chính sách đổi vé
+    const changeTicketFullStr = getChangeTicketFullString();
+    document.getElementById('viewChangeTicketText').innerText = changeTicketFullStr;
 
     // Giao diện Header theo Hãng
     const badgeText = (ticketData.airlineCode || "VJ").toUpperCase().trim();
@@ -1233,6 +1292,7 @@ Lưu ý quan trọng:
     const carryOn = document.getElementById('carryOnBaggage').value;
     const checked = document.getElementById('checkedBaggage').value;
     const discountPercent = document.getElementById('discountPercent').value;
+    const changeTicketStr = getChangeTicketFullString();
 
     let paxText = `• Người lớn: ${adultCount} khách (${document.getElementById('viewAdultTotal').innerText})`;
     if (parseInt(childCount) > 0) {
@@ -1252,9 +1312,9 @@ Lưu ý quan trọng:
       const legAirline = leg.airlineName || ticketData.airline;
       legsText += `
 📍 [${leg.badge || `CHẶNG ${idx + 1}`}] - ${legAirline}
-• Tuyến: ${leg.fromCity} ➔ ${leg.toCity}
-• Ngày bay: ${leg.date} | Giờ: ${leg.time}
-• Chuyến bay: ${leg.flightNo} (${leg.aircraft || 'Tiêu chuẩn'}) - ${leg.duration || 'Bay thẳng'}`;
+- Tuyến: ${leg.fromCity} ➔ ${leg.toCity}
+- Ngày bay: ${leg.date} | Giờ: ${leg.time}
+- Chuyến bay: ${leg.flightNo} (${leg.aircraft || 'Tiêu chuẩn'}) - ${leg.duration || 'Bay thẳng'}`;
     });
 
     const text = `✈️ BÁO GIÁ VÉ MÁY BAY - ƯU ĐÃI GIẢM ${discountPercent}%
@@ -1262,14 +1322,17 @@ ${ticketData.tripDesc ? `(${ticketData.tripDesc})` : ''}
 ${legsText}
 
 🧳 TIÊU CHUẨN HÀNH LÝ:
-• Xách tay: ${carryOn}
-• Ký gửi: ${checked}
+- Xách tay: ${carryOn}
+- Ký gửi: ${checked}
+
+🔄 CHÍNH SÁCH ĐỔI VÉ:
+- ${changeTicketStr}
 
 👥 THÔNG TIN HÀNH KHÁCH & GIÁ:
 ${paxText}
 ----------------------------------------
-• Tổng bill ban đầu: ${document.getElementById('viewSumInitial').innerText}
-• Giảm ${discountPercent}% trên tổng: ${document.getElementById('viewDiscountAmount').innerText}
+- Tổng bill ban đầu: ${document.getElementById('viewSumInitial').innerText}
+- Giảm ${discountPercent}% trên tổng: ${document.getElementById('viewDiscountAmount').innerText}
 👉 TỔNG THANH TOÁN: ${document.getElementById('viewFinalTotal').innerText}
 (Trọn gói toàn bộ vé, thuế phí sân bay và hành lý theo tiêu chuẩn)
 
